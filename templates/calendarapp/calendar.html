@@ -1,0 +1,114 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Event Calendar{% endblock title %}
+
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'calendar/main.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
+{% endblock extracss %}
+
+{% block breadcrumb %}
+  <div>
+      <h1><i class="fa fa-calendar"></i> Calendar</h1>
+      <p>Event Calendar</p>
+  </div>
+  <ul class="app-breadcrumb breadcrumb">
+      <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+      <li class="breadcrumb-item"><a href="#">Calendar</a></li>
+  </ul>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="tile row">
+      <div class="col-md-12">
+        <div class="container" id="calendar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" style="overflow-y: initial;" role="document">
+      <div class="modal-content">
+      </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extrascripts %}
+  <script src="{% static 'calendar/main.js' %}"></script>
+  <script>
+    function addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+  </script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var today = new Date();
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          height: 780,
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          },
+          initialDate: today,
+          firstDay: 1,
+          navLinks: true, // can click day/week names to navigate views
+          eventDisplay: 'block',
+          eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          },
+          eventClassNames: function(arg) {
+            var classes = [arg.event.extendedProps['parent_category'].toLowerCase(), 
+            "planned_exertion_" + arg.event.extendedProps['planned_exertion'],
+            'fc-event-custom']
+            return classes
+          },
+          eventMouseEnter: function(mouseEnterInfo) {
+            mouseEnterInfo.el.classList.toggle("custom-hover")
+          },
+          eventMouseLeave: function(mouseLeaveInfo) {
+            mouseLeaveInfo.el.classList.toggle("custom-hover")
+          },
+          dateClick: function(info) {
+            console.log("dateClick registered")
+            var day = info.dayEl.getAttribute("data-date")
+            var el = info.dayEl.getElementsByClassName("fc-daygrid-day-top")[0]
+            $(el).modalForm({
+                modalID: "#eventModal",
+                formURL: "{% url 'calendarapp:event' %}" + day + "/",
+            })
+          },
+          eventClick: function(info) {
+            info.jsEvent.preventDefault()
+            console.log("eventClick registered")
+            var el = info.el
+            var url = info.event.extendedProps['url_details']
+            $(el).modalForm({
+                modalID: "#eventModal",
+                formURL: url,
+            })
+          },
+          dayMaxEvents: true, // allow "more" link when too many events
+          events: {{ events|safe }},
+          eventDataTransform: function(eventData) {
+            if (eventData.allDay) {
+              var d = new Date(eventData.end)
+              eventData.end= addDays(d, 1)
+            }
+          },
+        });
+
+        calendar.render();
+      });
+  </script>
+{% endblock extrascripts %}

@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Create Event Category{% endblock title %}
+
+{% block extracss %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
+{% endblock extracss %}
+
+{% block breadcrumb %}
+    <div>
+        <h1><i class="app-menu__icon fa fa-database"></i> Event Categories</h1>
+        <p>Add new event category</p>
+    </div>
+    <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        <li class="breadcrumb-item"><a href="#">Event Categories</a></li>
+    </ul>
+{% endblock breadcrumb %}
+
+{% block content %}
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="tile">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.parent_category.id_for_label }}">{{ form.parent_category.label }}</label>
+                {{ form.parent_category }}
+            </div>
+        </div>
+    <button type="button" class="btn btn-default" onclick="location.href='{% url 'calendarapp:calendar' %}';">Close</button>
+    <button type="submit" class="btn btn-primary">Create</button>  
+    </div>  
+</form>
+
+{% endblock content %}
+
+{% block extrascripts %}
+{% endblock extrascripts %}

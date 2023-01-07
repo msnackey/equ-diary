@@ -1,0 +1,115 @@
+<form method="post" action="">
+{% csrf_token %}
+{% load static %}
+
+  <div class="modal-header bg-primary">
+    <h5 class="modal-title text-white">Event Details</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body" style="height: 80vh; overflow-y: auto;">
+    <div class="row">
+      <div class="col-10">
+        <h3>{{ event.title }}</h3>
+        <p><span class="{{ event.category.parent_category|lower }} text-white"> &nbsp;{{ event.category.parent_category }}&nbsp;</span> &nbsp;{{ event.start_date|date:"l j F" }}
+        {% if event.all_day and event.start_datetime != event.end_datetime %}
+          - {{ event.end_date|date:"l j F" }}
+        {% elif not event.all_day %}
+          ⋅ {{ event.start_time|date:"G:i" }} - {{ event.end_time|date:"G:i" }}
+        {% endif %}
+        </p>
+      </div>
+      <div class="col-2 d-flex justify-content-center align-items-end">
+        <img id="lastEventButton" class="img-btn" src="{% static 'images/book-half.svg' %}" width="24" height="24" style="margin-bottom: 16px;" alt="Latest Events">
+      </div>
+    </div>
+    <hr style="margin-top: 0px;">
+    {% if event.description %}
+    <div class="clearfix">
+        <p>{{ event.description }}</p>
+    </div>
+    <hr>
+    {% endif %}
+    {% if last_events %}
+    <div id="lastEventDiv" class="clearfix hide">
+      <h6>Feedback from latest activities</h6>
+      <table class="table table-secondary table-bordered table-sm">
+        {% for last_event in last_events %}
+          <tr>
+            <td class="col-2">{{ last_event.start_date|date:"d M" }}</td>
+            <td class="col-1"><img class="rating_{{ event.post_rating }}" height="16" width="16" style="margin: 2px 0px 6px 0px;">
+              <p class="dot exertion_{{ event.post_exertion }}" style="margin-bottom: 0px;"></p></td>
+            <td class="col-9">{{ last_event.post_fb_neg }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <hr id="lastEventHR" class="hide">
+    {% endif %}
+    {% if event.start_datetime < now %}
+      {% if not event.is_post %}
+        {% include 'calendarapp/event_details_post.html' %}
+      {% else %}
+        {% include 'calendarapp/event_details_edit.html' %}
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="modal-footer">
+      <button id="eventDelete" type="button" class="btn btn-danger">Delete</button>
+      {% if event.start_datetime > now %}
+      <button id="eventEdit" type="button" class="btn btn-primary">Edit</button>
+      {% elif event.is_post %}
+      <button id="eventPostEdit" type="button" class="btn btn-primary">Edit</button>
+      {% else %}
+      <button type="submit" class="btn btn-primary">Update</button>
+      {% endif %}
+      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+  </div>
+
+</form>
+
+<script>
+$("#lastEventButton").on("click", function () {
+  $("#lastEventDiv").toggleClass("hide");
+  $("#lastEventHR").toggleClass("hide");
+});
+
+$("textarea").each(function () {
+  console.log(this.scrollHeight);
+  this.setAttribute("style", "height:" + Math.max(36, (this.scrollHeight + 3)) + "px;overflow-y:hidden;");
+});
+
+$("textarea").on("input", function () {
+  this.style.height = 0;
+  this.style.height = Math.max(160, (this.scrollHeight + 3)) + "px";
+});
+
+$("textarea").on("focus", function () {
+  this.style.height = Math.max(160, (this.scrollHeight + 3)) + "px";
+});
+
+$("textarea").on("focusout", function () {
+  this.style.height = 0;
+  this.style.height = (this.scrollHeight + 3) + "px";
+});
+
+$(function() {
+    $("#eventEdit").modalForm({
+        modalID: "#eventModal",
+        formURL: "{% url 'calendarapp:event_edit' pk=event.pk %}",
+    });
+
+    $("#eventPostEdit").modalForm({
+        modalID: "#eventModal",
+        formURL: "{% url 'calendarapp:event_post_edit' pk=event.pk %}",
+    });
+
+    $("#eventDelete").modalForm({
+        modalID: "#eventModal",
+        formURL: "{% url 'calendarapp:event_delete' pk=event.pk %}",
+    });
+});
+</script>

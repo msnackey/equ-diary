@@ -1,0 +1,96 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Overview{% endblock title %}
+
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
+{% endblock extracss %}
+
+{% block breadcrumb %}
+    <div>
+        <h1><i class="fa fa-dashboard"></i> Overview</h1>
+        <p>Overview</p>
+    </div>
+    <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        <li class="breadcrumb-item"><a href="#">Overview</a></li>
+    </ul>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="tile">
+    <div class="col-md-12">
+        {% regroup past_events by start_date|date:"F Y" as past_events_by_month %}
+        {% for start_date in past_events_by_month %}
+            <h4>{{ start_date.grouper|capfirst }}</h5>
+            <table class="table table-secondary table-bordered table-sm table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th colspan="2" class="col-2">Activity</th>
+                        <th style="width: 2%;"></th>
+                        <th class="col-3">Positive points</th>
+                        <th class="col-3">Attention points</th>
+                        <th class="col-3">Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in start_date.list %}
+                    <tr>
+                        <td class="{{ event.category.parent_category|lower }}"></td>
+                        <td class="table_event" data-form-url="{% url 'calendarapp:event_details' pk=event.pk %}">
+                            {{ event.title }}
+                            <p>({{ event.start_date }})</p>
+                        </td>
+                        <td class="text-center">
+                            <img class="rating_{{ event.post_rating }}" height="16" width="16" style="margin: 2px 0px 6px 0px;">
+                            <p class="dot exertion_{{ event.post_exertion }}" style="margin-bottom: 0px;"></p>
+                        </td>
+                        <td>{{ event.post_fb_pos }}</td>
+                        <td>{{ event.post_fb_neg }}</td>
+                        <td>{{ event.post_comments }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <hr>
+        {% endfor %}
+    </div>
+
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="overflow-y: initial;" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extrascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            function eventDetailsModalForm() {
+                $("tbody .table_event").each(function () {
+                    $(this).modalForm({
+                    modalID: "#eventModal",
+                    formURL: $(this).data("form-url")
+                    });
+                });
+            };
+            eventDetailsModalForm();
+        });
+    </script>
+
+    <!-- <script type="text/javascript">
+        $(document).ready(function() {
+            $('.table_ratexe').each(function (){
+                console.log('Function gets called')
+                var img = document.createElement("img")
+                img.src = "{% static 'images/emoji-dizzy-fill.svg' %}"
+                img.style.width = "16px"
+                img.style.height = "16px"
+                $(this).append(img)
+            })
+        })
+    </script> -->
+{% endblock extrascripts %}

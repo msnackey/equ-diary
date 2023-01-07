@@ -1,0 +1,260 @@
+.img-btn {
+  cursor: pointer;
+}
+  .img-btn:hover {
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 40%);
+  }
+
+.hide {
+  display: none;
+}
+
+.dot {
+  height: 16px;
+  width: 16px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.exertion_None {
+  display: none;
+}
+
+.exertion_1 {
+  background-color: #0043E0;
+}
+
+.exertion_2, .exertion_3 {
+  background-color: #00D42A;
+}
+
+.exertion_4, .exertion_5, .exertion_6 {
+  background-color: #E0B701;
+}
+
+.exertion_7, .exertion_8 {
+  background-color: #E06700;
+}
+
+.exertion_9, .exertion_10 {
+  background-color: #E00201;
+}
+
+
+.rating_None {
+  display: none;
+}
+
+.rating_1 {
+  content: url("/static/images/emoji-dizzy-fill.svg");
+}
+
+.rating_2 {
+  content: url("/static/images/emoji-frown-fill.svg");
+}
+
+.rating_3 {
+  content: url("/static/images/emoji-neutral-fill.svg");
+}
+
+.rating_4 {
+  content: url("/static/images//emoji-smile-fill.svg");
+}
+
+.rating_5 {
+  content: url("/static/images/emoji-laughing-fill.svg");
+}
+
+
+
+input[type=range] {
+  margin: 0;
+  width: 100%;
+}
+
+/* HIDE RADIO */
+[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+  opacity: 0.4;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+  opacity: 1;
+}
+
+
+
+/* Custom event coloring */
+.fc-event-custom {
+  padding: 1px;
+  padding-left: 5px;
+  margin-bottom: 2px;
+}
+
+.training {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #085996;
+  background-color: #085996;
+}
+
+.lessen {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #96130F;
+  background-color: #96130F;
+}
+
+.gezondheid {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #089637;
+  background-color: #089637;
+}
+
+.cyclus {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #9660B1;
+  background-color: #9660B1;
+}
+
+.grondwerk {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #F6A00A;
+  background-color: #F6A00A;
+}
+
+.planned_exertion_1 {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #8cceff;
+  background-color: #8cceff;
+}
+
+.planned_exertion_2, .planned_exertion_3 {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #6cb2e6;
+  background-color: #6cb2e6;
+}
+
+.planned_exertion_4, .planned_exertion_5, .planned_exertion_6 {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #4b95cc;
+  background-color: #4b95cc;
+}
+
+.planned_exertion_7, .planned_exertion_8 {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #2b78b2;
+  background-color: #2b78b2;
+}
+
+.planned_exertion_9, .planned_exertion_10 {
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #085996;
+  background-color: #085996;
+}
+
+
+.custom-hover {
+  color: #fff !important;
+  /* default TEXT color */
+  text-decoration: none !important;
+  /* if <a> has an href */
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.form-field-hide {
+  display: none !important;
+}
+
+#calendar .fc-daygrid-event-dot {
+  border: unset !important;
+}
+
+.calendar {
+    width: 98%;
+    margin: auto;
+    font-size: 13px;
+  }
+
+  .calendar tr, .calendar td {
+    border: 1px solid black;
+  }
+
+  .calendar th {
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+  }
+
+  .calendar td {
+    width: 200px;
+    height: 150px;
+    padding: 20px 0px 0px 5px;
+  }
+
+  .month {
+    font-size: 25px;
+  }
+
+  .date {
+    font-size: 16px;
+  }
+
+  ul {
+    height: 100%;
+    padding: 0px 5px 0px 20px;
+  }
+
+  a {
+    color: #17a2b8;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+
+  .btn {
+    outline: none;
+    color: black;
+    background-color: transparent;
+    box-shadow: 0 0 0 0;
+  }
+
+  .clearfix {
+    margin: 15px;
+  }
+
+  .form {
+    margin: auto;
+  }
+
+  .form input, .form select, .form textarea {
+    border-radius: 5px;
+    border: 1px solid #17a2b8;
+    outline: none;
+    background: none;
+    padding: 5px;
+    width: 100%;
+  }

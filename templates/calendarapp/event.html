@@ -1,0 +1,176 @@
+<form method="post" action="">
+  {% csrf_token %}
+
+ <div class="modal-header bg-primary">
+    <h5 class="modal-title text-white">Create Event</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body" style="height: 80vh; overflow-y: auto;">
+    <div class="form-group">
+      {{ form.title }}
+    </div>
+    <div class="form-group form-row" style="margin-left: 0px;">
+      <span>{{ form.start_date }}</span><span class="form-field-hideable form-field-hide">&nbsp;&nbsp;&nbsp;</span><span class="form-field-hideable form-field-hide">{{ form.start_time }}</span>
+      <span style="font-size: 1.5rem;">&nbsp;-&nbsp;</span>
+      <span class="form-field-hideable">{{ form.end_date }}</span><span class="form-field-hideable form-field-hide">{{ form.end_time }}</span>
+      <button id="add-time" type="button" class="btn btn-default" style="margin-left: 5px;">Add time</button>
+    </div>
+    <div id="all-day" class="form-group form-field-hide">
+      {{ form.all_day }} All day
+    </div>
+    <div class="form-group">
+      <select name="parent_category" class="form-control" id="id_parent_category">
+        <option value=""></option>
+        {% for parent_category in parent_categories %}
+          <option value="{{ parent_category.pk }}">{{ parent_category }}</option>
+        {% endfor %}
+        <option id="new_category" value="{% url 'calendarapp:eventcategory_create' %}">Add new category:</option>
+      </select>
+    </div>
+    <div class="form-group">
+      {{ form.category }}
+    </div>
+    <div id="planned_exertion" class="form-group form-control">
+      <h6 class="d-inline align-middle" style="margin-right: 10px;">Planned exertion</h6>{{ form.planned_exertion }}
+    </div>
+    <div class="form-group">
+      {{ form.description }}
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Create</button>
+  </div>
+
+</form>
+
+<script>
+  function hideFuncOne() {
+    var els = [document.getElementById("add-time"), document.getElementById("all-day")]
+    var hideEls = document.getElementsByClassName("form-field-hideable")
+    for (i = 0; i < hideEls.length; i++) {
+      els.push(hideEls[i]);
+    }
+    for (i = 0; i < els.length; i++) {
+      els[i].classList.toggle("form-field-hide")
+    }
+  }
+  document.getElementById("add-time").addEventListener("click", hideFuncOne);
+
+  function hideFuncTwo() {
+    var els = document.getElementsByClassName("form-field-hideable")
+    for (i = 0; i < els.length; i++) {
+      els[i].classList.toggle("form-field-hide")
+    }
+  }
+  document.getElementById("id_all_day").addEventListener("click", hideFuncTwo);
+
+  function clearEndDate() {
+    var el = document.getElementById("id_end_date")
+    el.value = ""
+  }
+  document.getElementById("add-time").addEventListener("click", clearEndDate);
+
+  
+  // JS to control the two dropdown menu's to select parent category and category
+  //
+  //
+  // Gets the category select element by id
+  var cat_select = document.getElementById("id_category")
+  // Hides the category by default
+  cat_select.classList.add("hide");
+
+  // Gets the parent category select element by id
+  var par_cat_select = document.getElementById("id_parent_category")
+  // Shows the category select once the parent category select has changed input
+  par_cat_select.addEventListener("input", function () {
+    $("#id_category").removeClass("hide");
+  });
+  // Hides all categories
+  par_cat_select.addEventListener("input", function () { 
+    hide_categories();
+  });
+  // Shows the categories related to the parent category
+  par_cat_select.addEventListener("input", function () {
+    show_categories(par_cat_select.value); 
+  });
+  // Clears the category field when parent category changes
+  par_cat_select.addEventListener("input", function () {
+    cat_select.value = ""
+  });
+
+  // Hides all the category options by iterating through all options in the select element and setting 
+  // their disabled and hidden attributes to true
+  function hide_categories () {
+    for (i = 0; i < cat_select.options.length; i++) {
+      cat_select.options[i].disabled = true;
+      cat_select.options[i].hidden = true;
+    };
+  };
+  
+  // Takes the categories from the django view with a template tag
+  // and takes the parent category pk as input
+  function show_categories (p_pk) {
+    const filtered_cats = filter_categories('{{categories|safe}}', Number(p_pk));
+
+    // Iterates through all the category select options to check if they exist in the filtered categories list
+    // If so, removes the disabled and hidden attributes so that the option shows in the select element
+    for (j = 0; j < cat_select.options.length; j++) {
+      if (filtered_cats.includes(cat_select.options[j].label)) {
+        cat_select.options[j].disabled = false;
+        cat_select.options[j].hidden = false;
+      }   
+    };
+  };
+
+  // Takes in a JSON and the parent pk from the parent category select element to filter what categories should be visible
+  function filter_categories (cat, p_pk) {
+    // Parses the JSON
+    const cat_parsed = JSON.parse(cat)
+    // Filters the JSON based on the parent pk
+    const cat_filtered = cat_parsed.filter(function (category) {
+      return category.fields.parent_category===p_pk;
+    });
+    
+    // Turns the filtered categories dictionary into a list
+    const cat_list = []
+    for (i = 0; i < cat_filtered.length; i++) {
+      cat_list.push(cat_filtered[i].fields.name)
+    };
+    return cat_list
+  };
+
+  // Takes the category select value and transfers this to the title text input
+  cat_select.addEventListener("input", function () {
+    document.getElementById("id_title").value = this.options[this.selectedIndex].label;
+  });
+
+  // Hides the planned exertion form field unless the category is 'Training'
+  var planned_exertion = document.getElementById("planned_exertion")
+  planned_exertion.classList.add("hide")
+
+  par_cat_select.addEventListener("input", function () {
+    if (this.options[this.selectedIndex].label === "Training") {
+      planned_exertion.classList.remove("hide")
+    } else {
+      planned_exertion.classList.add("hide")
+    };
+  });
+
+
+  // Add new category option in the parent category select element redirects to the create category url
+  $(function(){
+      // bind change event to select
+      $('#id_parent_category').on('change', function () {
+          var url = $(this).val(); // get selected value
+          if (url.length > 3) { // checks the length of the url so that it is longer than just a category pk
+              window.location = url; // redirect
+          }
+          return false;
+      });
+    });
+</script>

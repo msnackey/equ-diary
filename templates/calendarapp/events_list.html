@@ -1,0 +1,117 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Event List{% endblock title %}
+
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
+{% endblock extracss %}
+
+{% block breadcrumb %}
+    <div>
+        <h1><i class="app-menu__icon fa fa-th-list"></i> Events</h1>
+        <p>Event List</p>
+    </div>
+    <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        <li class="breadcrumb-item"><a href="#">Event List</a></li>
+    </ul>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="tile">
+    <div class="col-md-12">
+                <div class="table-responsive">
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="eventTable" class="table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="sampleTable_info">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="col-4" tabindex="0" rowspan="1" colspan="1">Event Name</th>
+                                            <th class="col-2"  tabindex="0" rowspan="1" colspan="1">Date</th>
+                                            <th class="col-2"  tabindex="0" rowspan="1" colspan="1"></th>
+                                            <th class="col-2"  tabindex="0" rowspan="1" colspan="1">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for event in object_list %}
+                                            <tr role="row" class="odd">
+                                                <td class="table_event" data-form-url="{% url 'calendarapp:event_details' pk=event.pk %}">
+                                                    <a href="#">{{ event.title }}</a>
+                                                </td>
+                                                <td data-sort="{{ event.start_datetime|date:'Y-m-d' }}">
+                                                    {{ event.start_date }}
+                                                </td>
+                                                <td>{% if event.start_datetime == event.end_datetime %}
+                                                    <span style="color: gray;">(All day)</span>
+                                                    {% elif event.start_time == event.end_time %}
+                                                    {{ event.end_date }}
+                                                    {% else %}
+                                                    {{ event.start_datetime|date:'G:i -' }}
+                                                    {{ event.end_datetime|date:'G:i' }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ event.description }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>
+
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" style="overflow-y: initial;" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extrascripts %}
+    <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        function eventDetailsModalForm() {
+            $("body .table_event").each(function () {
+                $(this).modalForm({
+                modalID: "#eventModal",
+                formURL: $(this).data("form-url")
+                });
+            });
+        };
+        eventDetailsModalForm();
+    });
+
+
+<!--    $(document).ready(function() {-->
+<!--        $('body').on('click', '.table_event', function(event){-->
+<!--            console.log($(this).data("form-url"))-->
+<!--            $(this).modalForm({-->
+<!--                modalID: '#eventModal',-->
+<!--                formURL: $(this)[0].getAttribute("data-form-url")-->
+<!--            })-->
+<!--        })-->
+<!--    })-->
+
+    $('#eventTable').DataTable({
+        "paging": false,
+        "columnDefs": [
+            {
+                targets: 2,
+                orderable: false,
+            },
+            {
+                targets: 3,
+                visible: false,
+            },
+        ],
+        "order": [[1, 'asc'], [0, 'asc']],
+    });
+    </script>
+{% endblock extrascripts %}
