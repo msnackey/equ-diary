@@ -19,13 +19,9 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-<div class="row">
+<div class="row tile">
   <div class="col-md-12">
-    <div class="tile row">
-      <div class="col-md-12">
-        <div class="container" id="calendar"></div>
-      </div>
-    </div>
+    <div id="calendar"></div>
   </div>
 </div>
 
@@ -60,7 +56,7 @@
           },
           initialDate: today,
           firstDay: 1,
-          navLinks: true, // can click day/week names to navigate views
+          navLinks: false, // can click day/week names to navigate views
           eventDisplay: 'block',
           eventTimeFormat: {
             hour: '2-digit',
@@ -79,7 +75,7 @@
           eventMouseLeave: function(mouseLeaveInfo) {
             mouseLeaveInfo.el.classList.toggle("custom-hover")
           },
-          dateClick: function(info) {
+          dateClick: function Test(info) {
             console.log("dateClick registered")
             var day = info.dayEl.getAttribute("data-date")
             var el = info.dayEl.getElementsByClassName("fc-daygrid-day-top")[0]
