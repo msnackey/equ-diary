@@ -16,52 +16,52 @@
 {% block content %}
 <div class="row tile px-md-3">
     <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table id="eventTable" class="table table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="sampleTable_info">
-                                    <thead>
-                                        <tr role="row">
-                                            <th class="col-4" tabindex="0" rowspan="1" colspan="1">Event Name</th>
-                                            <th class="col-2"  tabindex="0" rowspan="1" colspan="1">Date</th>
-                                            <th class="col-2"  tabindex="0" rowspan="1" colspan="1"></th>
-                                            <th tabindex="0" rowspan="1" colspan="1">Description</th>
-                                            <th tabindex="0" rowspan="1" colspan="1">Positive points</th>
-                                            <th tabindex="0" rowspan="1" colspan="1">Attention points</th>
-                                            <th tabindex="0" rowspan="1" colspan="1">Notes</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for event in object_list %}
-                                            <tr role="row" class="odd">
-                                                <td class="table_event" data-form-url="{% url 'calendarapp:event_details' pk=event.pk %}">
-                                                    <a href="#">{{ event.title }}</a>
-                                                </td>
-                                                <td data-sort="{{ event.start_datetime|date:'Y-m-d' }}">
-                                                    {{ event.start_date }}
-                                                </td>
-                                                <td>{% if event.start_datetime == event.end_datetime %}
-                                                    <span style="color: gray;">(All day)</span>
-                                                    {% elif event.start_time == event.end_time %}
-                                                    {{ event.end_date }}
-                                                    {% else %}
-                                                    {{ event.start_datetime|date:'G:i -' }}
-                                                    {{ event.end_datetime|date:'G:i' }}
-                                                    {% endif %}
-                                                </td>
-                                                <td>{{ event.description }}</td>
-                                                <td>{{ event.post_fb_pos }}</td>
-                                                <td>{{ event.post_fb_neg }}</td>
-                                                <td>{{ event.post_comments }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+        <div class="table-responsive">
+            <div class="dataTables_wrapper container dt-bootstrap4 no-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="eventTable" class="table table-hover table-bordered dataTable no-footer" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th class="col-4" tabindex="0" rowspan="1" colspan="1">Event Name</th>
+                                    <th class="col-2"  tabindex="0" rowspan="1" colspan="1">Date</th>
+                                    <th class="col-2"  tabindex="0" rowspan="1" colspan="1"></th>
+                                    <th tabindex="0" rowspan="1" colspan="1">Description</th>
+                                    <th tabindex="0" rowspan="1" colspan="1">Positive points</th>
+                                    <th tabindex="0" rowspan="1" colspan="1">Attention points</th>
+                                    <th tabindex="0" rowspan="1" colspan="1">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for event in object_list %}
+                                    <tr role="row" class="odd">
+                                        <td class="table_event" data-form-url="{% url 'calendarapp:event_details' pk=event.pk %}">
+                                            <a href="#">{{ event.title }}</a>
+                                        </td>
+                                        <td data-sort="{{ event.start_datetime|date:'Y-m-d' }}">
+                                            {{ event.start_date }}
+                                        </td>
+                                        <td>{% if event.start_datetime == event.end_datetime %}
+                                            <span style="color: gray;">(All day)</span>
+                                            {% elif event.start_time == event.end_time %}
+                                            {{ event.end_date }}
+                                            {% else %}
+                                            {{ event.start_datetime|date:'G:i -' }}
+                                            {{ event.end_datetime|date:'G:i' }}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ event.description }}</td>
+                                        <td>{{ event.post_fb_pos }}</td>
+                                        <td>{{ event.post_fb_neg }}</td>
+                                        <td>{{ event.post_comments }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -77,6 +77,7 @@
     <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
     <script type="text/javascript">
+    // Adds a Bootstrap ModalForm to all td elements with the table_event class
     $(document).ready(function() {
         function eventDetailsModalForm() {
             $("body .table_event").each(function () {
@@ -89,19 +90,22 @@
         eventDetailsModalForm();
     });
 
+    // Creates a DataTable
     $('#eventTable').DataTable({
         "paging": false,
         "columnDefs": [
+            // Removes the orderable from 'end date' column
             {
                 targets: 2,
                 orderable: false,
             },
+            // Hides the text field columns; they remain searchable
             {
                 targets: [3, 4, 5, 6],
                 visible: false,
             },
         ],
-        "order": [[1, 'asc'], [0, 'asc']],
+        "order": [[1, 'asc'], [0, 'asc']], // Orders by startdate first, title second
     });
     </script>
 {% endblock extrascripts %}

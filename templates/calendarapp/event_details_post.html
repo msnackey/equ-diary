@@ -1,14 +1,15 @@
 {% load static %}
 
-{% if event.category.parent_category.name == "Training" or event.category.parent_category.name == "Lessen" %}
+<!-- Shows only the post_rating, post_exertion and post_feedback form fields when the event parent category is work-related -->
+{% if event.category.parent_category.name == "Training" or event.category.parent_category.name == "Lessen" or event.category.parent_category.name == "Grondwerk" %}
 <div class="form-group">
     <div class="row" style="margin: 0px;">
         <div class="col">
             <h6 style="margin-bottom: 12px;">How did it go?</h6>
+            <!-- Shows a radio option and replaces it with an emoji image -->
             {% for radio in form.post_rating %}
             <label for="{{ radio.id_for_label }}" style="padding-right: 5px;">
                 {{ radio.tag }}
-                <!-- <img class="rating_{{ radio.choice_label }}" alt="{{ radio.choice_label }}"> -->
                 {% if radio.choice_label == "1" %}
                 <img src="{% static 'images/emoji-dizzy-fill.svg' %}" width="20" height="20" alt="{{ radio.choice_label }}">
                 {% elif radio.choice_label == "2" %}

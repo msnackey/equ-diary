@@ -33,18 +33,22 @@ def next_month(d):
 
 
 class OverviewView(LoginRequiredMixin, View):
+    """Simple view that contains all post events from the user."""
+
     login_url = "accounts:signin"
     template_name = "calendarapp/overview.html"
 
     def get(self, request, *args, **kwargs):
-        past_events = Event.objects.get_past_work_events(user=request.user)
+        post_events = Event.objects.get_post_events(user=request.user)
         context = {
-            "past_events": past_events,
+            "post_events": post_events,
         }
         return render(request, self.template_name, context)
 
 
 class EventCategoryCreateView(CreateView):
+    """EventCategory create view."""
+
     template_name = "calendarapp/eventcategory_create.html"
     form_class = EventCategoryForm
     success_url = reverse_lazy('calendarapp:calendar')

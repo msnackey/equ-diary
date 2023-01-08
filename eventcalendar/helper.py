@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 def get_current_user():
+    """Helper function to determine the currently logged in user."""
     active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
     user_id_list = []
     for session in active_sessions:

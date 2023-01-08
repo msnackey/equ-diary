@@ -12,6 +12,7 @@
     <div class="form-group">
       {{ form.title }}
     </div>
+    <!-- Date and time form fields; toggling all fields (except start date) with JS functions below -->
     <div class="form-group form-row" style="margin-left: 0px;">
       <span>{{ form.start_date }}</span><span class="form-field-hideable form-field-hide">&nbsp;&nbsp;&nbsp;</span><span class="form-field-hideable form-field-hide">{{ form.start_time }}</span>
       <span style="font-size: 1.5rem;">&nbsp;-&nbsp;</span>
@@ -21,12 +22,14 @@
     <div id="all-day" class="form-group form-field-hide">
       {{ form.all_day }} All day
     </div>
+    <!-- Shows a first select element with all available parent categories and adds a 'new category' option -->
     <div class="form-group">
       <select name="parent_category" class="form-control" id="id_parent_category">
         <option value=""></option>
         {% for parent_category in parent_categories %}
           <option value="{{ parent_category.pk }}">{{ parent_category }}</option>
         {% endfor %}
+        <!-- Adding a new category option; if selected, opens the eventcategory_create url through JS function below -->
         <option id="new_category" value="{% url 'calendarapp:eventcategory_create' %}">Add new category:</option>
       </select>
     </div>
@@ -49,6 +52,8 @@
 </form>
 
 <script>
+  // Function to toggle the form-field-hide class for the add-time button (hides) and all-day checkbox (shows)
+  // and on all elements with form-field-hideable class, adds the function to the add-time button
   function hideFuncOne() {
     var els = [document.getElementById("add-time"), document.getElementById("all-day")]
     var hideEls = document.getElementsByClassName("form-field-hideable")
@@ -61,6 +66,8 @@
   }
   document.getElementById("add-time").addEventListener("click", hideFuncOne);
 
+  // Function to toggle the form-field-hide class for all elements with form-field-hideable class,
+  // adds the function to the all-day checkbox
   function hideFuncTwo() {
     var els = document.getElementsByClassName("form-field-hideable")
     for (i = 0; i < els.length; i++) {
@@ -69,6 +76,16 @@
   }
   document.getElementById("id_all_day").addEventListener("click", hideFuncTwo);
 
+  // Clears the time fields, adds the function to the all-day checkbox
+  function clearTimes() {
+    var el = document.getElementById("id_start_time")
+    el.value = ""
+    var el = document.getElementById("id_end_time")
+    el.value = ""
+  }
+  document.getElementById("id_all_day").addEventListener("click", clearTimes);
+
+  // Clears the enddate field, adds the function to the add-time button
   function clearEndDate() {
     var el = document.getElementById("id_end_date")
     el.value = ""

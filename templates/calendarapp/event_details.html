@@ -13,6 +13,8 @@
     <div class="row">
       <div class="col-10">
         <h3>{{ event.title }}</h3>
+        <!-- Shows the parent category and adds the appropriate class 
+        Also shows the date and time, with if statements based on whatever date and time are present -->
         <p><span class="{{ event.category.parent_category|lower }} text-white"> &nbsp;{{ event.category.parent_category }}&nbsp;</span> &nbsp;{{ event.start_date|date:"l j F" }}
         {% if event.all_day and event.start_datetime != event.end_datetime %}
           - {{ event.end_date|date:"l j F" }}
@@ -21,9 +23,12 @@
         {% endif %}
         </p>
       </div>
+      <!-- Shows a button to display the feedback from the last five events of the same event category, if any exist -->
+      {% if last_events %}
       <div class="col-2 d-flex justify-content-center align-items-end">
         <img id="lastEventButton" class="img-btn" src="{% static 'images/book-half.svg' %}" width="24" height="24" style="margin-bottom: 16px;" alt="Latest Events">
       </div>
+      {% endif %}
     </div>
     <hr style="margin-top: 0px;">
     {% if event.description %}
@@ -32,7 +37,7 @@
     </div>
     <hr>
     {% endif %}
-    {% if last_events %}
+    <!-- Shows feedback from the last five events from the same category. Starts hidden, shows when the lastEventButton is pressed -->
     <div id="lastEventDiv" class="clearfix hide">
       <h6>Feedback from latest activities</h6>
       <table class="table table-secondary table-bordered table-sm">
@@ -47,8 +52,9 @@
       </table>
     </div>
     <hr id="lastEventHR" class="hide">
-    {% endif %}
+    <!-- Shows post event information if the event is in the past -->
     {% if event.start_datetime < now %}
+      <!-- Shows details_post if the event has not yet been updated, otherwise shows details_edit -->
       {% if not event.is_post %}
         {% include 'calendarapp/event_details_post.html' %}
       {% else %}
@@ -59,6 +65,7 @@
 
   <div class="modal-footer">
       <button id="eventDelete" type="button" class="btn btn-danger">Delete</button>
+      <!-- Shows the appropriate button depending on the event start and is_post attributes -->
       {% if event.start_datetime > now %}
       <button id="eventEdit" type="button" class="btn btn-primary">Edit</button>
       {% elif event.is_post %}
@@ -72,13 +79,14 @@
 </form>
 
 <script>
+// Toggles the hide class on the last five event div and hr
 $("#lastEventButton").on("click", function () {
   $("#lastEventDiv").toggleClass("hide");
   $("#lastEventHR").toggleClass("hide");
 });
 
+// For each textarea, automatically determines the height based on the input
 $("textarea").each(function () {
-  console.log(this.scrollHeight);
   this.setAttribute("style", "height:" + Math.max(36, (this.scrollHeight + 3)) + "px;overflow-y:hidden;");
 });
 
@@ -96,6 +104,8 @@ $("textarea").on("focusout", function () {
   this.style.height = (this.scrollHeight + 3) + "px";
 });
 
+
+// Sets the appropriate Bootstrap Modal Form to each button in the modal footer
 $(function() {
     $("#eventEdit").modalForm({
         modalID: "#eventModal",

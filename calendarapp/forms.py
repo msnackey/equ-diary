@@ -4,10 +4,13 @@ from bootstrap_modal_forms.forms import BSModalModelForm
 
 
 class EventModalForm(BSModalModelForm):
+    """Event form using Bootstrap Modal, for creating and editing events."""
+
     class Meta:
         model = Event
         fields = ["category", "title", "description", "all_day", "start_date", "start_time", "end_date", "end_time", 
-        "planned_exertion"]
+        "planned_exertion"] # Only selects the relevant fields for creating a new event
+        # Adding custom widgets for each field, i.e. to add CSS classes
         widgets = {
             "category": forms.Select(
                 attrs={"class": "form-control"},
@@ -42,6 +45,7 @@ class EventModalForm(BSModalModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Adds initial values for start and end dates using the date from the form kwargs."""
         date = kwargs.pop("date", None)
         super(EventModalForm, self).__init__(*args, **kwargs)
         self.fields["start_date"].initial = date
@@ -49,9 +53,13 @@ class EventModalForm(BSModalModelForm):
 
 
 class EventDetailsModalForm(BSModalModelForm):
+    """Event form using Bootstrap Modal, for updating an event after it has occurred."""
+
     class Meta:
         model = Event
+        # Only selects the relevant fields for updating a post event
         fields = ["is_post", "post_rating", "post_exertion", "post_fb_neg", "post_fb_pos", "post_comments"]
+        # Adding custom widgets for each field, i.e. to add CSS classes
         widgets = {
             "post_rating": forms.RadioSelect(
                 choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')],
@@ -73,6 +81,8 @@ class EventDetailsModalForm(BSModalModelForm):
 
 
 class EventCategoryForm(forms.ModelForm):
+    """EventCategory form using Bootstrap Modal, for creating categories."""
+    
     class Meta:
         model = EventCategory
         fields = ["name", "parent_category"]

@@ -16,8 +16,10 @@
 {% block content %}
 <div class="row tile px-md-3">
     <div class="col-md-12">
-        {% regroup past_events by start_date|date:"F Y" as past_events_by_month %}
-        {% for start_date in past_events_by_month %}
+        <!-- Regroups all post_events by month -->
+        {% regroup post_events by start_date|date:"F Y" as post_events_by_month %}
+        <!-- For each month, create a title and table with the activity, ratings and text fields -->
+        {% for start_date in post_events_by_month %}
             <h4>{{ start_date.grouper|capfirst }}</h5>
             <table class="table table-secondary table-bordered table-sm table-hover">
                 <thead class="table-dark">
@@ -65,6 +67,7 @@
 
 {% block extrascripts %}
     <script type="text/javascript">
+        // Adds a Bootstrap ModalForm to all td elements with the table_event class
         $(document).ready(function() {
             function eventDetailsModalForm() {
                 $("tbody .table_event").each(function () {
@@ -77,17 +80,4 @@
             eventDetailsModalForm();
         });
     </script>
-
-    <!-- <script type="text/javascript">
-        $(document).ready(function() {
-            $('.table_ratexe').each(function (){
-                console.log('Function gets called')
-                var img = document.createElement("img")
-                img.src = "{% static 'images/emoji-dizzy-fill.svg' %}"
-                img.style.width = "16px"
-                img.style.height = "16px"
-                $(this).append(img)
-            })
-        })
-    </script> -->
 {% endblock extrascripts %}

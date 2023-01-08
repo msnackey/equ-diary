@@ -8,32 +8,36 @@ from accounts.models import User
 
 
 class EventManager(models.Manager):
-    """ Event manager """
+    """Event manager"""
 
     def get_all_events(self, user):
+        """Gets all non-deleted events from the currently signed in user."""
         events = Event.objects.filter(user=user, is_active=True, is_deleted=False)
         return events
 
-    def get_running_events(self, user):
-        running_events = Event.objects.filter(
+    def get_upcoming_events(self, user):
+        """Gets the upcoming events from the currently signed in user."""
+        upcoming_events = Event.objects.filter(
             user=user,
             is_active=True,
             is_deleted=False,
             end_datetime__gte=datetime.now(),
-        ).order_by("start_datetime")[:6]
-        return running_events
+        ).order_by("start_datetime")
+        return upcoming_events
 
-    def get_past_work_events(self, user):
-        past_events = Event.objects.filter(
-            Q(user=user),
-            Q(is_active=True),
-            Q(is_deleted=False),
-            Q(end_datetime__lte=datetime.now()),
-            ~Q(post_rating__isnull=True) | ~Q(post_exertion__isnull=True) | ~Q(post_fb_neg="") | ~Q(post_fb_pos="") | ~Q(post_comments=""),
+    def get_post_events(self, user):
+        """Gets all post events from the currently signed in user."""
+        post_events = Event.objects.filter(
+            user=user,
+            is_active=True,
+            is_deleted=False,
+            is_post=True,
         ).order_by("-start_datetime")
-        return past_events
+        return post_events
 
     def get_last_five_events(self, user, category):
+        """Gets the last five events from the currently signed in user where 
+        negative feedback (post_fb_neg) has been entered and the category equals the category parameter."""
         last_five_events = Event.objects.filter(
             user=user,
             is_active=True,
@@ -47,7 +51,7 @@ class EventManager(models.Manager):
 
 
 class Event(EventAbstract):
-    """ Event model """
+    """Event model"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events")
     category = models.ForeignKey(EventCategory, on_delete=models.CASCADE, related_name="tests")
@@ -61,6 +65,7 @@ class Event(EventAbstract):
     end_time = models.TimeField(blank=True, null=True)
     end_datetime = models.DateTimeField(blank=True, null=True)
     planned_exertion = models.PositiveSmallIntegerField(blank=True, null=True)
+    # 'post_' fields are updated by the user after an event has occurred
     post_rating = models.PositiveSmallIntegerField(blank=True, null=True)
     post_exertion = models.PositiveSmallIntegerField(blank=True, null=True)
     post_fb_neg = models.TextField(blank=True)
@@ -72,10 +77,5 @@ class Event(EventAbstract):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse("calendarapp:event-details", args=(self.id,))
-
-    @property
-    def get_html_url(self):
-        url = reverse("calendarapp:event-details", args=(self.id,))
-        return f'<a href="{url}"> {self.title} </a>'
+    # def get_absolute_url(self):
+    #     return reverse("calendarapp:event-details", args=(self.id,))

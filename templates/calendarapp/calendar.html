@@ -31,88 +31,94 @@
 {% block extrascripts %}
   <script src="{% static 'calendar/main.js' %}"></script>
   <script>
+    // Helper function for adding days to a given date
     function addDays(date, days) {
       var result = new Date(date);
       result.setDate(result.getDate() + days);
       return result;
-    }
-  </script>
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var today = new Date();
+    };
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          customButtons: {
-            addEvent: {
-              text: "Add",
-              icon: "plus-square",
-              click: function() {
-                var day = today.getFullYear().toString().padStart(2, '0') + '-' + (today.getMonth()+1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0')
-                $(this).modalForm({
-                    modalID: "#eventModal",
-                  formURL: "{% url 'calendarapp:event' %}" + day + "/",
-                })
-              }
-            }
-          },
-          height: 780,
-          headerToolbar: {
-            start: 'prev,next today addEvent',
-            center: 'title',
-            end: 'dayGridMonth,timeGridWeek,timeGridDay'
-          },
-          initialDate: today,
-          firstDay: 1,
-          navLinks: false, // can click day/week names to navigate views
-          eventDisplay: 'block',
-          eventTimeFormat: {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-          },
-          eventClassNames: function(arg) {
-            var classes = [arg.event.extendedProps['parent_category'].toLowerCase(), 
-            "planned_exertion_" + arg.event.extendedProps['planned_exertion'],
-            'fc-event-custom']
-            return classes
-          },
-          eventMouseEnter: function(mouseEnterInfo) {
-            mouseEnterInfo.el.classList.toggle("custom-hover")
-          },
-          eventMouseLeave: function(mouseLeaveInfo) {
-            mouseLeaveInfo.el.classList.toggle("custom-hover")
-          },
-          dateClick: function (info) {
-            console.log("dateClick registered")
-            var day = info.dayEl.getAttribute("data-date")
-            var el = info.dayEl.getElementsByClassName("fc-daygrid-day-top")[0]
-            $(el).modalForm({
-                modalID: "#eventModal",
+    // Loads the FullCalendar on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var today = new Date();
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        customButtons: {
+          // Button for adding a new event with the current date using a bootstrap modal
+          addEvent: {
+            text: "Add",
+            icon: "plus-square",
+            click: function() {
+              var day = today.getFullYear().toString().padStart(2, '0') + '-' + (today.getMonth()+1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0')
+              $(this).modalForm({
+                  modalID: "#eventModal",
                 formURL: "{% url 'calendarapp:event' %}" + day + "/",
-            })
-          },
-          eventClick: function(info) {
-            info.jsEvent.preventDefault()
-            console.log("eventClick registered")
-            var el = info.el
-            var url = info.event.extendedProps['url_details']
-            $(el).modalForm({
-                modalID: "#eventModal",
-                formURL: url,
-            })
-          },
-          dayMaxEvents: true, // allow "more" link when too many events
-          events: {{ events|safe }},
-          eventDataTransform: function(eventData) {
-            if (eventData.allDay) {
-              var d = new Date(eventData.end)
-              eventData.end= addDays(d, 1)
+              })
             }
-          },
-        });
-
-        calendar.render();
+          }
+        },
+        height: 780,
+        headerToolbar: {
+          start: 'prev,next today addEvent',
+          center: 'title',
+          end: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        initialDate: today,
+        firstDay: 1,
+        navLinks: false,
+        eventDisplay: 'block',
+        eventTimeFormat: {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        },
+        eventClassNames: function(arg) {
+          // Adding classes to the event fc-event-custom and dynamically based on its extended properties
+          var classes = [arg.event.extendedProps['parent_category'].toLowerCase(), 
+          "planned_exertion_" + arg.event.extendedProps['planned_exertion'],
+          'fc-event-custom']
+          return classes
+        },
+        eventMouseEnter: function(mouseEnterInfo) {
+          // Adding a hover class on enter
+          mouseEnterInfo.el.classList.toggle("custom-hover")
+        },
+        eventMouseLeave: function(mouseLeaveInfo) {
+          // Removing a hover class on exit
+          mouseLeaveInfo.el.classList.toggle("custom-hover")
+        },
+        dateClick: function (info) {
+          // On clicking a date, adding a modal form for creating an event to the top of the daygrid
+          var day = info.dayEl.getAttribute("data-date")
+          var el = info.dayEl.getElementsByClassName("fc-daygrid-day-top")[0]
+          $(el).modalForm({
+              modalID: "#eventModal",
+              formURL: "{% url 'calendarapp:event' %}" + day + "/",
+          })
+        },
+        eventClick: function(info) {
+          // On clicking an event, adding a modal form for viewing the event details to the event
+          info.jsEvent.preventDefault() // Prevents the default behavior of navigating to a different url
+          var el = info.el
+          var url = info.event.extendedProps['url_details']
+          $(el).modalForm({
+              modalID: "#eventModal",
+              formURL: url,
+          })
+        },
+        dayMaxEvents: true, // Shows "more" when there are too many events to show
+        events: {{ events|safe }}, // Gets all the events via the events template tag
+        eventDataTransform: function(eventData) {
+          if (eventData.allDay) {
+            // Adds a day to an event if its an allDay event, otherwise it shows a day short
+            var d = new Date(eventData.end)
+            eventData.end= addDays(d, 1)
+          }
+        },
       });
+
+      calendar.render();
+    });
   </script>
 {% endblock extrascripts %}

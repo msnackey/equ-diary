@@ -18,6 +18,7 @@
 }
 
 
+/* Adds a button feel to images */
 .img-btn {
   cursor: pointer;
 }
@@ -25,10 +26,14 @@
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 40%);
   }
 
+
+/* Hides an element */
 .hide {
   display: none;
 }
 
+
+/* Creates the dot for reflecting the exertion of an activity */
 .dot {
   height: 16px;
   width: 16px;
@@ -37,6 +42,7 @@
   display: inline-block;
 }
 
+/* Colors for exertion */
 .exertion_None {
   display: none;
 }
@@ -62,6 +68,7 @@
 }
 
 
+/* Adds emoji images to ratings */
 .rating_None {
   display: none;
 }
@@ -87,7 +94,7 @@
 }
 
 
-
+/* Replaces radio options with images */
 input[type=range] {
   margin: 0;
   width: 100%;
@@ -111,7 +118,6 @@ input[type=range] {
 [type=radio]:checked + img {
   opacity: 1;
 }
-
 
 
 /* Custom event coloring */
@@ -156,6 +162,7 @@ input[type=range] {
   background-color: #F6A00A;
 }
 
+/* Event coloring based on planned exertion */
 .planned_exertion_1 {
   color: white !important;
   font-weight: bold;
@@ -192,6 +199,7 @@ input[type=range] {
 }
 
 
+/* Hover style for the fc events */
 .custom-hover {
   color: #fff !important;
   /* default TEXT color */
@@ -200,13 +208,14 @@ input[type=range] {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+
+/* Hides a form-field */
 .form-field-hide {
   display: none !important;
 }
 
-#calendar .fc-daygrid-event-dot {
-  border: unset !important;
-}
+
+
 
 .calendar {
     width: 98%;
