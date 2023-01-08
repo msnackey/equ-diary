@@ -11,6 +11,10 @@
   .fc-toolbar-chunk {
     margin-top: 2px;
   }
+
+  .fc .fc-toolbar-title {
+    font-size: 1.5em;
+  }
 }
 
 
