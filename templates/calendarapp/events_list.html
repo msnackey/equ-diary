@@ -10,16 +10,11 @@
 {% block breadcrumb %}
     <div>
         <h1><i class="app-menu__icon fa fa-th-list"></i> Events</h1>
-        <p>Event List</p>
     </div>
-    <ul class="app-breadcrumb breadcrumb">
-        <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-        <li class="breadcrumb-item"><a href="#">Event List</a></li>
-    </ul>
 {% endblock breadcrumb %}
 
 {% block content %}
-<div class="tile">
+<div class="row tile px-md-3">
     <div class="col-md-12">
                 <div class="table-responsive">
                     <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
@@ -31,7 +26,10 @@
                                             <th class="col-4" tabindex="0" rowspan="1" colspan="1">Event Name</th>
                                             <th class="col-2"  tabindex="0" rowspan="1" colspan="1">Date</th>
                                             <th class="col-2"  tabindex="0" rowspan="1" colspan="1"></th>
-                                            <th class="col-2"  tabindex="0" rowspan="1" colspan="1">Description</th>
+                                            <th tabindex="0" rowspan="1" colspan="1">Description</th>
+                                            <th tabindex="0" rowspan="1" colspan="1">Positive points</th>
+                                            <th tabindex="0" rowspan="1" colspan="1">Attention points</th>
+                                            <th tabindex="0" rowspan="1" colspan="1">Notes</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -53,6 +51,9 @@
                                                     {% endif %}
                                                 </td>
                                                 <td>{{ event.description }}</td>
+                                                <td>{{ event.post_fb_pos }}</td>
+                                                <td>{{ event.post_fb_neg }}</td>
+                                                <td>{{ event.post_comments }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -88,17 +89,6 @@
         eventDetailsModalForm();
     });
 
-
-<!--    $(document).ready(function() {-->
-<!--        $('body').on('click', '.table_event', function(event){-->
-<!--            console.log($(this).data("form-url"))-->
-<!--            $(this).modalForm({-->
-<!--                modalID: '#eventModal',-->
-<!--                formURL: $(this)[0].getAttribute("data-form-url")-->
-<!--            })-->
-<!--        })-->
-<!--    })-->
-
     $('#eventTable').DataTable({
         "paging": false,
         "columnDefs": [
@@ -107,7 +97,7 @@
                 orderable: false,
             },
             {
-                targets: 3,
+                targets: [3, 4, 5, 6],
                 visible: false,
             },
         ],

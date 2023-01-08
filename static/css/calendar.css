@@ -1,3 +1,19 @@
+/* Adjusting the fc header toolbar to fit mobile width */
+@media (max-width: 768px){
+  .fc .fc-toolbar {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    font-size: 90%;
+    margin: 0 16px 0 16px;
+  }
+
+  .fc-toolbar-chunk {
+    margin-top: 2px;
+  }
+}
+
+
 .img-btn {
   cursor: pointer;
 }

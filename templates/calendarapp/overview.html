@@ -10,16 +10,11 @@
 {% block breadcrumb %}
     <div>
         <h1><i class="fa fa-dashboard"></i> Overview</h1>
-        <p>Overview</p>
     </div>
-    <ul class="app-breadcrumb breadcrumb">
-        <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-        <li class="breadcrumb-item"><a href="#">Overview</a></li>
-    </ul>
 {% endblock breadcrumb %}
 
 {% block content %}
-<div class="tile">
+<div class="row tile px-md-3">
     <div class="col-md-12">
         {% regroup past_events by start_date|date:"F Y" as past_events_by_month %}
         {% for start_date in past_events_by_month %}
@@ -54,6 +49,8 @@
                 </tbody>
             </table>
             <hr>
+        {% empty %}
+        <p style="font-weight: bold;">No data to show yet.</p>
         {% endfor %}
     </div>
 </div>

@@ -10,17 +10,12 @@
 {% block breadcrumb %}
   <div>
       <h1><i class="fa fa-calendar"></i> Calendar</h1>
-      <p>Event Calendar</p>
   </div>
-  <ul class="app-breadcrumb breadcrumb">
-      <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-      <li class="breadcrumb-item"><a href="#">Calendar</a></li>
-  </ul>
 {% endblock breadcrumb %}
 
 {% block content %}
-<div class="row tile">
-  <div class="col-md-12">
+<div class="row tile px-md-3">
+  <div class="w-100 px-md-3">
     <div id="calendar"></div>
   </div>
 </div>
@@ -48,11 +43,24 @@
         var today = new Date();
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
+          customButtons: {
+            addEvent: {
+              text: "Add",
+              icon: "plus-square",
+              click: function() {
+                var day = today.getFullYear().toString().padStart(2, '0') + '-' + (today.getMonth()+1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0')
+                $(this).modalForm({
+                    modalID: "#eventModal",
+                  formURL: "{% url 'calendarapp:event' %}" + day + "/",
+                })
+              }
+            }
+          },
           height: 780,
           headerToolbar: {
-            left: 'prev,next today',
+            start: 'prev,next today addEvent',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            end: 'dayGridMonth,timeGridWeek,timeGridDay'
           },
           initialDate: today,
           firstDay: 1,
@@ -75,7 +83,7 @@
           eventMouseLeave: function(mouseLeaveInfo) {
             mouseLeaveInfo.el.classList.toggle("custom-hover")
           },
-          dateClick: function Test(info) {
+          dateClick: function (info) {
             console.log("dateClick registered")
             var day = info.dayEl.getAttribute("data-date")
             var el = info.dayEl.getElementsByClassName("fc-daygrid-day-top")[0]
