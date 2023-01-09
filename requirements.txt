@@ -1,5 +1,5 @@
 appdirs==1.4.4
-asgiref==3.3.2
+asgiref==3.6.0
 astroid==2.6.2
 asttokens==2.0.5
 backports.entry-points-selectable==1.1.0
@@ -11,7 +11,7 @@ click==8.0.1
 colorama==0.4.4
 commonmark==0.9.1
 distlib==0.3.2
-Django==3.2.14
+Django==4.1.5
 django-bootstrap-modal-forms==2.2.0
 django-doctor==2.5.0
 dparse==0.5.1

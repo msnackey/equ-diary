@@ -1,6 +1,7 @@
 __pycache__/
 .DS_Store
 venv/
+venv_dev/
 /.env
 /db.sqlite3
 /db_dev.sqlite3

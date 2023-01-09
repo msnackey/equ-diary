@@ -21,3 +21,8 @@ class EventAdmin(admin.ModelAdmin):
 @admin.register(models.EventCategory)
 class EventCategoryAdmin(admin.ModelAdmin):
     model = models.EventCategory
+    list_display = [
+        "id",
+        "name",
+        "parent_category",
+    ]
