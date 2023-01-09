@@ -1,3 +1,52 @@
+/* Remove default styles for range element */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Adding custom styles for range element, track & thumb */
+/* Track Styles */
+/* Chrome, Safari, Opera, and Edge Chromium */
+input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg, rgba(0,67,224,1) 0%, rgba(0,212,42,1) 25%, rgba(224,183,1,1) 50%, rgba(224,103,0,1) 75%, rgba(224,2,1,1) 100%);
+  height: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Firefox */
+input[type="range"]::-moz-range-track {
+  background: linear-gradient(90deg, rgba(0,67,224,1) 0%, rgba(0,212,42,1) 25%, rgba(224,183,1,1) 50%, rgba(224,103,0,1) 75%, rgba(224,2,1,1) 100%);
+  height: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Thumb Styles */
+/* Chrome, Safari, Opera, and Edge Chromium */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  margin-top: -4px; /* Centers thumb on the track */
+  background-color: transparent;
+  height: 1rem;
+  width: 0.8rem;
+  border: 3px solid rgb(255, 255, 255);
+  border-radius: 0.2rem;
+  box-shadow: 1px 1px 3px rgb(40, 40, 40);
+}
+
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+  background-color: transparent;
+  height: 1rem;
+  width: 0.8rem;
+  border: 3px solid rgb(255, 255, 255);
+  border-radius: 0.2rem;
+  box-shadow: 1px 1px 3px rgb(40, 40, 40);
+}
+
+
 /* Adjusting the fc header toolbar to fit mobile width */
 @media (max-width: 768px){
   .fc .fc-toolbar {
