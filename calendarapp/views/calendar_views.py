@@ -35,6 +35,6 @@ class CalendarView(LoginRequiredMixin, generic.View):
                     "planned_exertion": event.planned_exertion, # used for adding CSS classes
                 }
             )
-        rand = int(datetime.now().strftime("%Y%m%d%H%M%S"))
+        rand = int(datetime.now().strftime("%Y%m%d"))
         context = {"events": event_list, "rand": rand}
         return render(request, self.template_name, context)
