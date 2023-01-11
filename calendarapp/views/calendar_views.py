@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from datetime import datetime
+
 from calendarapp.models import Event
 
 
@@ -33,5 +35,6 @@ class CalendarView(LoginRequiredMixin, generic.View):
                     "planned_exertion": event.planned_exertion, # used for adding CSS classes
                 }
             )
-        context = {"events": event_list,}
+        rand = int(datetime.now().strftime("%Y%m%d%H%M%S"))
+        context = {"events": event_list, "rand": rand}
         return render(request, self.template_name, context)
