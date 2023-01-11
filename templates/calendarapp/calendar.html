@@ -3,8 +3,8 @@
 {% block title %}Calendar | {% endblock title %}
 
 {% block extracss %}
-  <link rel="stylesheet" type="text/css" href="{% static 'calendar/main.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'calendar/main.css' %}?r={{ rand }}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}?r={{ rand }}">
 {% endblock extracss %}
 
 {% block content %}

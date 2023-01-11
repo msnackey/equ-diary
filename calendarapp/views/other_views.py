@@ -40,8 +40,10 @@ class OverviewView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         post_events = Event.objects.get_post_events(user=request.user)
+        rand = int(datetime.now().strftime("%Y%m%d%H%M%S"))
         context = {
             "post_events": post_events,
+            "rand": rand,
         }
         return render(request, self.template_name, context)
 
@@ -52,3 +54,8 @@ class EventCategoryCreateView(CreateView):
     template_name = "calendarapp/eventcategory_create.html"
     form_class = EventCategoryForm
     success_url = reverse_lazy('calendarapp:calendar')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rand'] = int(datetime.now().strftime("%Y%m%d%H%M%S"))
+        return context
