@@ -8,7 +8,14 @@
                 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta name="mobile-web-app-capable" content="yes">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>{% block title %}{% endblock title %}</title>
+        <title>{% block title %}{% endblock title %}EquDiary</title>
+        <link rel="icon" type="image/png" sizes="512x512" href="{% static 'images/favicons/favicon-512x512.png' %}">
+        <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/favicons/favicon-192x192.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicons/favicon-180x180.png' %}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{% static 'images/favicons/favicon-96x96.png' %}">
+        <link rel="icon" type="image/png" sizes="48x48" href="{% static 'images/favicons/favicon-48x48.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicons/favicon-16x16.png' %}">
 
         <!-- Main CSS-->
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
@@ -21,7 +28,7 @@
     <body class="app sidebar-mini">
         <!-- Navbar-->
         <header class="app-header">
-            <a class="app-header__logo" href="#">Event Calendar</a>
+            <a class="app-header__logo" href="{% url 'calendarapp:calendar' %}"><img src="{% static 'images/favicons/favicon-180x180.png' %}" width="32px" style="padding-bottom: 10px;" alt=""> EquDiary</a>
             <!-- Sidebar toggle button-->
             <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
             <!-- Navbar Right Menu-->
@@ -42,10 +49,10 @@
         <aside class="app-sidebar">
             <ul class="app-menu">
                 <li>
-                    <a class="app-menu__item {% if request.resolver_match.url_name == 'overview' %} active{% endif %}" href="{% url 'calendarapp:overview' %}"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Overview</span></a>
+                    <a class="app-menu__item {% if request.resolver_match.url_name == 'calendar' %} active{% endif %}" href="{% url 'calendarapp:calendar' %}"><i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Calendar</span></a>
                 </li>
                 <li>
-                    <a class="app-menu__item {% if request.resolver_match.url_name == 'calendar' %} active{% endif %}" href="{% url 'calendarapp:calendar' %}"><i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Calendar</span></a>
+                    <a class="app-menu__item {% if request.resolver_match.url_name == 'overview' %} active{% endif %}" href="{% url 'calendarapp:overview' %}"><i class="app-menu__icon fa fa-commenting-o"></i><span class="app-menu__label">Evaluation</span></a>
                 </li>
                 <li class="treeview">
                     <a class="app-menu__item {% if request.resolver_match.url_name == 'upcoming_events' or request.resolver_match.url_name == 'all_events' %} active{% endif %}" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Events</span><i class="treeview-indicator fa fa-angle-right"></i></a>
@@ -61,10 +68,6 @@
             </ul>
         </aside>
         <main class="app-content">
-            <div class="app-title">
-                {% block breadcrumb %}
-                {% endblock breadcrumb %}
-            </div>
             {% block content %}
             {% endblock content %}
         </main>

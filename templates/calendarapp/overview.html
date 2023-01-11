@@ -1,17 +1,11 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Overview{% endblock title %}
+{% block title %}Overview | {% endblock title %}
 
 {% block extracss %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
 {% endblock extracss %}
-
-{% block breadcrumb %}
-    <div>
-        <h1><i class="fa fa-dashboard"></i> Overview</h1>
-    </div>
-{% endblock breadcrumb %}
 
 {% block content %}
 <div class="row tile px-md-3">

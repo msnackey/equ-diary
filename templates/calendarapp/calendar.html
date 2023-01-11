@@ -1,17 +1,11 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% block title %}Event Calendar{% endblock title %}
+{% block title %}Calendar | {% endblock title %}
 
 {% block extracss %}
   <link rel="stylesheet" type="text/css" href="{% static 'calendar/main.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
 {% endblock extracss %}
-
-{% block breadcrumb %}
-  <div>
-      <h1><i class="fa fa-calendar"></i> Calendar</h1>
-  </div>
-{% endblock breadcrumb %}
 
 {% block content %}
 <div class="row tile px-md-3">

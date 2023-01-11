@@ -1,3 +1,28 @@
+/* Pistachio palette:
+Primary: #87A38A
+Secondary: #DFF0E1
+Dark: #3F5742
+Complementary: #573741
+Complementary-light: #A38790
+Light-grayish: #2A332B
+Grayish: #202620
+Dark-grayish: #151A16
+Light: #D5D9D4
+Lighter: #DFE3DE
+ */
+
+/* Default palette:
+Primary: #009688
+Darker: #007d71
+Text-select-background: #00635a
+Menu-active-item-background: #0d1214
+App-sidebar-background: #222d32
+App-sidebar-treeview-bg: #2a383e
+a: #17a2b8
+Button-hover: #007065
+*/
+
+
 /* Remove default styles for range element */
 input[type="range"] {
   -webkit-appearance: none;
@@ -169,80 +194,63 @@ input[type=range] {
 }
 
 
-/* Custom event coloring */
+/* Custom event styling */
 .fc-event-custom {
+  color: white !important;
+  font-weight: bold;
   padding: 1px;
   padding-left: 5px;
   margin-bottom: 2px;
 }
 
 .training {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #085996;
   background-color: #085996;
 }
 
 .lessen {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #96130F;
   background-color: #96130F;
 }
 
 .gezondheid {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #089637;
   background-color: #089637;
 }
 
 .cyclus {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #9660B1;
   background-color: #9660B1;
 }
 
 .grondwerk {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #F6A00A;
   background-color: #F6A00A;
 }
 
 /* Event coloring based on planned exertion */
 .planned_exertion_1 {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #8cceff;
   background-color: #8cceff;
 }
 
 .planned_exertion_2, .planned_exertion_3 {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #6cb2e6;
   background-color: #6cb2e6;
 }
 
 .planned_exertion_4, .planned_exertion_5, .planned_exertion_6 {
-  color: white !important;
-  font-weight: bold;
+
   border: 1px solid #4b95cc;
   background-color: #4b95cc;
 }
 
 .planned_exertion_7, .planned_exertion_8 {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #2b78b2;
   background-color: #2b78b2;
 }
 
 .planned_exertion_9, .planned_exertion_10 {
-  color: white !important;
-  font-weight: bold;
   border: 1px solid #085996;
   background-color: #085996;
 }
@@ -265,7 +273,7 @@ input[type=range] {
 
 
 
-
+/* Original custom css */
 .calendar {
     width: 98%;
     margin: auto;
@@ -302,7 +310,7 @@ input[type=range] {
   }
 
   a {
-    color: #17a2b8;
+    color: #A38790;
   }
 
   .left {
@@ -330,7 +338,7 @@ input[type=range] {
 
   .form input, .form select, .form textarea {
     border-radius: 5px;
-    border: 1px solid #17a2b8;
+    border: 1px solid #A38790;
     outline: none;
     background: none;
     padding: 5px;
