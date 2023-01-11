@@ -40,7 +40,7 @@ class OverviewView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         post_events = Event.objects.get_post_events(user=request.user)
-        rand = int(datetime.now().strftime("%Y%m%d%H%M%S"))
+        rand = int(datetime.now().strftime("%Y%m%d"))
         context = {
             "post_events": post_events,
             "rand": rand,
@@ -57,5 +57,5 @@ class EventCategoryCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['rand'] = int(datetime.now().strftime("%Y%m%d%H%M%S"))
+        context['rand'] = int(datetime.now().strftime("%Y%m%d"))
         return context
