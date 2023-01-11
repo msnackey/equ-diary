@@ -6,9 +6,9 @@ app_name = "calendarapp"
 
 
 urlpatterns = [
-    path("", views.OverviewView.as_view(), name="overview"),
+    path("", views.CalendarView.as_view(), name="calendar"),
 
-    path("calendar/", views.CalendarView.as_view(), name="calendar"),
+    path("evaluation/", views.OverviewView.as_view(), name="overview"),
     
     path("event/new/", views.EventModalCreateView.as_view(), name="event"),
     path("event/new/<str:date>/", views.EventModalCreateView.as_view(), name="event_create"),
