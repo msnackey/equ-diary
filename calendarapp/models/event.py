@@ -1,10 +1,11 @@
 from datetime import datetime
-from django.db import models
-from django.urls import reverse
-from django.db.models import Q
 
-from calendarapp.models import EventAbstract, EventCategory
+from django.db import models
+from django.db.models import Q
+from django.urls import reverse
+
 from accounts.models import User
+from calendarapp.models import EventAbstract, EventCategory
 
 
 class EventManager(models.Manager):
@@ -36,17 +37,22 @@ class EventManager(models.Manager):
         return post_events
 
     def get_last_five_events(self, user, category):
-        """Gets the last five events from the currently signed in user where 
-        negative feedback (post_fb_neg) has been entered and the category equals the category parameter."""
-        last_five_events = Event.objects.filter(
-            user=user,
-            is_active=True,
-            is_deleted=False,
-            end_datetime__lte=datetime.now(),
-            category=category,
-        ).exclude(
-            post_fb_neg="",
-        ).order_by("-start_datetime")[:5]
+        """Gets the last five events from the currently signed in user where
+        negative feedback (post_fb_neg) has been entered and the category equals the category parameter.
+        """
+        last_five_events = (
+            Event.objects.filter(
+                user=user,
+                is_active=True,
+                is_deleted=False,
+                end_datetime__lte=datetime.now(),
+                category=category,
+            )
+            .exclude(
+                post_fb_neg="",
+            )
+            .order_by("-start_datetime")[:5]
+        )
         return last_five_events
 
 
@@ -54,7 +60,9 @@ class Event(EventAbstract):
     """Event model"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events")
-    category = models.ForeignKey(EventCategory, on_delete=models.CASCADE, related_name="tests")
+    category = models.ForeignKey(
+        EventCategory, on_delete=models.CASCADE, related_name="events"
+    )
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     all_day = models.BooleanField(default=False)

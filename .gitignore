@@ -6,3 +6,4 @@ venv_dev/
 /db.sqlite3
 /db_dev.sqlite3
 /eventcalendar/settings/development.py
+/backups

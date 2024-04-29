@@ -65,6 +65,9 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a class="app-menu__item {% if request.resolver_match.url_name == 'exercises-list' %} active{% endif %}" href="{% url 'calendarapp:exercises' %}"><i class="app-menu__icon fa fa-line-chart"></i><span class="app-menu__label">Exercises</span></a>
+                </li>
             </ul>
         </aside>
         <main class="app-content">

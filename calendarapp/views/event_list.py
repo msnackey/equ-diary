@@ -16,7 +16,7 @@ class AllEventsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['rand'] = int(datetime.now().strftime("%Y%m%d"))
+        context["rand"] = int(datetime.now().strftime("%Y%m%d"))
         return context
 
 
@@ -28,8 +28,8 @@ class UpcomingEventsListView(ListView):
 
     def get_queryset(self):
         return Event.objects.get_upcoming_events(user=self.request.user)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['rand'] = int(datetime.now().strftime("%Y%m%d"))
+        context["rand"] = int(datetime.now().strftime("%Y%m%d"))
         return context

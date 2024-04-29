@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Exercises | {% endblock title %}
+
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}?r={{ rand }}">
+{% endblock extracss %}
+
+{% block content %}
+<div class="row tile px-md-3">
+    <div class="col-md-12">
+        <canvas id="exercisesChart"></canvas>
+        <canvas id="balanceExerciseChart"></canvas>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extrascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
+<script>
+const ctxExercisesChart = document.getElementById('exercisesChart');
+const ctxBalanceChart = document.getElementById('balanceExerciseChart');
+
+const exercisesData = {
+    datasets: [
+        {% for exercise_group, exercises in object_list.items %}
+          {% if exercise_group != excluded_exercises %}
+            {
+              label: "{{ exercise_group }}",
+              data: [{% for exercise in exercises %}{x: "{{ exercise.event.start_datetime }}", y: {{ exercise.reps }} * {{ exercise.duration }}},{% endfor %}],
+              borderWidth: 1,
+            },
+          {% endif %}
+        {% endfor %}
+    ]
+};
+
+const balanceData = {
+    datasets: [
+        {% for exercise_group, exercises in object_list.items %}
+          {% if exercise_group == excluded_exercises %}
+            {
+              label: "{{ exercise_group }}",
+              data: [{% for exercise in exercises %}{x: "{{ exercise.event.start_datetime }}", y: {{ exercise.reps }} * {{ exercise.duration }}},{% endfor %}],
+              borderWidth: 1,
+            },
+          {% endif %}
+        {% endfor %}
+    ]
+};
+
+const options = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Exercises'
+      },
+      tooltip: {
+        mode: 'index'
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Date'
+        },
+        type: 'time',
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Reps x Duration (s)'
+        }
+      }
+    }
+};
+
+const exercisesChart = new Chart(ctxExercisesChart, {
+    type: 'line',
+    data: exercisesData,
+    options: options
+    }
+);
+
+const balanceChart = new Chart(ctxBalanceChart, {
+    type: 'line',
+    data: balanceData,
+    options: options
+    }
+);
+balanceChart.options.plugins.title.text = "{{ excluded_exercises }} exercise";
+balanceChart.update()
+
+</script>
+{% endblock extrascripts %}

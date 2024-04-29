@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from calendarapp import models
 
 
@@ -26,3 +27,13 @@ class EventCategoryAdmin(admin.ModelAdmin):
         "name",
         "parent_category",
     ]
+
+
+@admin.register(models.Exercise)
+class ExerciseAdmin(admin.ModelAdmin):
+    model = models.Exercise
+
+
+@admin.register(models.ExerciseCategory)
+class ExerciseCategoryAdmin(admin.ModelAdmin):
+    model = models.ExerciseCategory

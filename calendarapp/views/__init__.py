@@ -1,9 +1,14 @@
 from .calendar_views import CalendarView
-from .event_views import (EventModalCreateView, EventDetailsModalUpdateView, EventEditModalUpdateView,
-                          EventDeleteModalUpdateView, EventPostEditModalUpdateView)
 from .event_list import AllEventsListView, UpcomingEventsListView
-from .other_views import OverviewView, EventCategoryCreateView
-
+from .event_views import (
+    EventDeleteModalUpdateView,
+    EventDetailsModalUpdateView,
+    EventEditModalUpdateView,
+    EventModalCreateView,
+    EventPostEditModalUpdateView,
+)
+from .exercises_list import AllExercisesListView
+from .other_views import EventCategoryCreateView, OverviewView
 
 __all__ = [
     AllEventsListView,
@@ -16,4 +21,5 @@ __all__ = [
     OverviewView,
     EventPostEditModalUpdateView,
     EventCategoryCreateView,
+    AllExercisesListView,
 ]
