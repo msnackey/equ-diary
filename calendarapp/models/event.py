@@ -89,6 +89,3 @@ class Event(EventAbstract):
 
     def __str__(self):
         return f"{self.title} ({self.start_date})"
-
-    # def get_absolute_url(self):
-    #     return reverse("calendarapp:event-details", args=(self.id,))

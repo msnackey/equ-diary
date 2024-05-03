@@ -48,7 +48,7 @@ class Exercise(models.Model):
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
-        limit_choices_to={"is_deleted": False},
+        limit_choices_to={"is_deleted": False, "category": 28},
         related_name="exercises",
     )
     category = models.ForeignKey(
