@@ -13,7 +13,9 @@ class EventManager(models.Manager):
 
     def get_all_events(self, user):
         """Gets all non-deleted events from the currently signed in user."""
-        events = Event.objects.filter(user=user, is_active=True, is_deleted=False)
+        events = Event.objects.filter(
+            user=user, is_active=True, is_deleted=False
+        ).order_by("-start_datetime")
         return events
 
     def get_upcoming_events(self, user):
@@ -23,7 +25,7 @@ class EventManager(models.Manager):
             is_active=True,
             is_deleted=False,
             end_datetime__gte=datetime.now(),
-        ).order_by("start_datetime")
+        ).order_by("-start_datetime")
         return upcoming_events
 
     def get_post_events(self, user):
@@ -82,8 +84,11 @@ class Event(EventAbstract):
 
     objects = EventManager()
 
+    class Meta:
+        ordering = ["-start_datetime"]
+
     def __str__(self):
-        return self.title
+        return f"{self.title} ({self.start_date})"
 
     # def get_absolute_url(self):
     #     return reverse("calendarapp:event-details", args=(self.id,))

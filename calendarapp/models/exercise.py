@@ -45,7 +45,12 @@ class ExerciseManager(models.Manager):
 class Exercise(models.Model):
     """Exercise model"""
 
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="exercises")
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        limit_choices_to={"is_deleted": False},
+        related_name="exercises",
+    )
     category = models.ForeignKey(
         ExerciseCategory, on_delete=models.CASCADE, related_name="exercises", null=True
     )

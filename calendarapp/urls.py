@@ -46,4 +46,5 @@ urlpatterns = [
         name="upcoming_events",
     ),
     path("exercises-list/", views.AllExercisesListView.as_view(), name="exercises"),
+    path("exercise/new/", views.ExerciseModalCreateView.as_view(), name="exercise"),
 ]

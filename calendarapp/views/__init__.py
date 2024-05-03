@@ -7,7 +7,7 @@ from .event_views import (
     EventModalCreateView,
     EventPostEditModalUpdateView,
 )
-from .exercises_list import AllExercisesListView
+from .exercises_views import AllExercisesListView, ExerciseModalCreateView
 from .other_views import EventCategoryCreateView, OverviewView
 
 __all__ = [
@@ -22,4 +22,5 @@ __all__ = [
     EventPostEditModalUpdateView,
     EventCategoryCreateView,
     AllExercisesListView,
+    ExerciseModalCreateView,
 ]

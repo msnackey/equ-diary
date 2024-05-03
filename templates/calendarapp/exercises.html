@@ -3,66 +3,70 @@
 
 {% block title %}Exercises | {% endblock title %}
 
-{% block extracss %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}?r={{ rand }}">
-{% endblock extracss %}
-
 {% block content %}
 <div class="row tile px-md-3">
     <div class="col-md-12">
-        <canvas id="exercisesChart"></canvas>
-        <canvas id="balanceExerciseChart"></canvas>
+      <button id="create-exercise" class="btn btn-primary" type="button" name="button">Create exercise</button>
+      <div><canvas id="exercisesChart"></canvas></div>
+      <div><br></div>
+      <div><canvas id="balanceExerciseChart"></canvas></div>
     </div>
+</div>
+
+<div class="modal fade" id="exerciseModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" style="overflow-y: initial;" role="document">
+      <div class="modal-content">
+      </div>
+  </div>
 </div>
 {% endblock content %}
 
 {% block extrascripts %}
+<script type="text/javascript">
+  $(document).ready(function() {
+      $("#create-exercise").modalForm({
+          modalID: "#exerciseModal",
+          formURL: "{% url 'calendarapp:exercise' %}",
+      });
+  });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
 <script>
 const ctxExercisesChart = document.getElementById('exercisesChart');
-const ctxBalanceChart = document.getElementById('balanceExerciseChart');
+const ctxBalanceExerciseChart = document.getElementById('balanceExerciseChart');
 
-const exercisesData = {
+var exercisesData = {
     datasets: [
         {% for exercise_group, exercises in object_list.items %}
-          {% if exercise_group != excluded_exercises %}
-            {
-              label: "{{ exercise_group }}",
-              data: [{% for exercise in exercises %}{x: "{{ exercise.event.start_datetime }}", y: {{ exercise.reps }} * {{ exercise.duration }}},{% endfor %}],
-              borderWidth: 1,
-            },
-          {% endif %}
+            {% if exercise_group.name != excluded_exercises %}
+                {
+                    label: '{{ exercise_group.name }}',
+                    data: [{% for exercise in exercises %}{x: '{{ exercise.event.start_datetime|date:"d/m/Y H:i" }}', y: {{ exercise.reps }} * {{ exercise.duration }}},{% endfor %}],
+                },
+            {% endif %}
         {% endfor %}
     ]
 };
 
-const balanceData = {
+var balanceExerciseData = {
     datasets: [
         {% for exercise_group, exercises in object_list.items %}
-          {% if exercise_group == excluded_exercises %}
-            {
-              label: "{{ exercise_group }}",
-              data: [{% for exercise in exercises %}{x: "{{ exercise.event.start_datetime }}", y: {{ exercise.reps }} * {{ exercise.duration }}},{% endfor %}],
-              borderWidth: 1,
-            },
-          {% endif %}
+            {% if exercise_group.name == excluded_exercises %}
+                {
+                    label: '{{ exercise_group.name }}',
+                    data: [{% for exercise in exercises %}{x: '{{ exercise.event.start_datetime|date:"d/m/Y H:i" }}', y: {{ exercise.reps }} * {{ exercise.duration }}},{% endfor %}],
+                },
+            {% endif %}
         {% endfor %}
     ]
 };
+
+const type = 'line';
 
 const options = {
     responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Exercises'
-      },
-      tooltip: {
-        mode: 'index'
-      },
-    },
     scales: {
       x: {
         title: {
@@ -70,6 +74,14 @@ const options = {
           text: 'Date'
         },
         type: 'time',
+        time: {
+          parser: 'DD/MM/YYYY HH:mm',
+          tooltipFormat: 'D MMM Y',
+          unit: 'day',
+          displayFormats: {
+            'day': 'D MMM'
+          }
+        }
       },
       y: {
         beginAtZero: true,
@@ -81,21 +93,19 @@ const options = {
     }
 };
 
-const exercisesChart = new Chart(ctxExercisesChart, {
-    type: 'line',
+var exercisesChart = new Chart(ctxExercisesChart, {
+    type: type,
     data: exercisesData,
     options: options
     }
 );
 
-const balanceChart = new Chart(ctxBalanceChart, {
-    type: 'line',
-    data: balanceData,
+{% comment %} var balanceExerciseChart = new Chart(ctxBalanceExerciseChart, {
+    type: type,
+    data: balanceExerciseData,
     options: options
     }
-);
-balanceChart.options.plugins.title.text = "{{ excluded_exercises }} exercise";
-balanceChart.update()
+); {% endcomment %}
 
 </script>
 {% endblock extrascripts %}

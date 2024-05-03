@@ -46,7 +46,7 @@
             click: function() {
               var day = today.getFullYear().toString().padStart(2, '0') + '-' + (today.getMonth()+1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0')
               $(this).modalForm({
-                  modalID: "#eventModal",
+                modalID: "#eventModal",
                 formURL: "{% url 'calendarapp:event' %}" + day + "/",
               })
             }

@@ -8,7 +8,10 @@ class EventAbstract(models.Model):
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_post = models.BooleanField(default=False) # 'is_post' is true when an event has been updated with feedback after occurring
+    is_post = models.BooleanField(
+        default=False
+    )  # 'is_post' is true when an event has been updated with feedback after occurring
 
     class Meta:
         abstract = True
+        # ordering = ["-created_at"]
