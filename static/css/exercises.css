@@ -1,0 +1,7 @@
+/* Chart container */
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 70vh;
+    width: 90%;
+  }
